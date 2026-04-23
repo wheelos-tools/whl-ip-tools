@@ -1,5 +1,9 @@
 [project]
 name = "whl-ip-tools"
+readme = { file = "README.md", content-type = "text/markdown" }
+authors = [
+  { name = "Pride Leong", email = "lykling.lyk@gmail.com" }
+]
 version = "0.1.0"
 description = "IP protocol analysis toolkit — send, capture, and analyze network packets"
 requires-python = ">=3.10"
@@ -31,6 +35,10 @@ ignore = ["B008"]
 
 [tool.ruff.format]
 quote-style = "double"
+
+[project.urls]
+"Homepage" = "https://github.com/wheelos-tools/whl-ip-tools/tree/main"
+"Bug Tracker" = "https://github.com/wheelos-tools/whl-ip-tools/issues"
 
 [build-system]
 requires = ["hatchling"]
