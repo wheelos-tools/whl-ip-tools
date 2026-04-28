@@ -290,7 +290,7 @@ class PacketViewer(App):
 
     # ── Multi-parser matching ───────────────────────────────────────
 
-    def _match_parser(self, data: bytes) -> type | None:
+    def _match_parser(self, data: bytes) -> Optional[type]:
         """Try each kaitai parser in order, return first that succeeds."""
         for parser_cls in self.kaitai_parsers:
             try:

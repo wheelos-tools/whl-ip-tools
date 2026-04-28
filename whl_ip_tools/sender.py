@@ -18,7 +18,7 @@ import signal
 import socket
 import sys
 import time
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 
 def parse_addr(addr_str: str) -> Tuple[str, int]:
@@ -33,7 +33,7 @@ def load_data(path: str) -> bytes:
         return f.read()
 
 
-def chunk_data(data: bytes, size: int) -> list[bytes]:
+def chunk_data(data: bytes, size: int) -> List[bytes]:
     if size <= 0:
         return [data]
     return [data[i : i + size] for i in range(0, len(data), size)]
@@ -51,7 +51,7 @@ def precise_sleep(target_interval: float, t_start: float):
 
 
 def send_loop(
-    sock, send_func, chunks: list[bytes], max_rounds: int, interval: float, label: str
+    sock, send_func, chunks: List[bytes], max_rounds: int, interval: float, label: str
 ):
     """Generic send loop.
 
@@ -98,7 +98,7 @@ def send_loop(
 
 
 def udp_client(
-    host: str, port: int, chunks: list[bytes], max_rounds: int, interval: float
+    host: str, port: int, chunks: List[bytes], max_rounds: int, interval: float
 ):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -115,7 +115,7 @@ def udp_client(
 
 
 def udp_server(
-    host: str, port: int, chunks: list[bytes], max_rounds: int, interval: float
+    host: str, port: int, chunks: List[bytes], max_rounds: int, interval: float
 ):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((host, port))
@@ -149,7 +149,7 @@ def udp_server(
 
 
 def tcp_client(
-    host: str, port: int, chunks: list[bytes], max_rounds: int, interval: float
+    host: str, port: int, chunks: List[bytes], max_rounds: int, interval: float
 ):
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -171,7 +171,7 @@ def tcp_client(
 
 
 def tcp_server(
-    host: str, port: int, chunks: list[bytes], max_rounds: int, interval: float
+    host: str, port: int, chunks: List[bytes], max_rounds: int, interval: float
 ):
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
