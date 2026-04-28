@@ -18,9 +18,10 @@ import signal
 import socket
 import sys
 import time
+from typing import Optional, Tuple
 
 
-def parse_addr(addr_str: str) -> tuple[str, int]:
+def parse_addr(addr_str: str) -> Tuple[str, int]:
     host, port = addr_str.rsplit(":", 1)
     return host, int(port)
 
@@ -207,13 +208,13 @@ def tcp_server(
 
 
 def run_send(
-    udp: str | None,
-    tcp: str | None,
+    udp: Optional[str],
+    tcp: Optional[str],
     file_path: str,
     chunk: int,
     loop: bool,
     interval: float,
-    count: int | None,
+    count: Optional[int],
     server: bool,
 ):
     if not udp and not tcp:

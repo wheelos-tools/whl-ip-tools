@@ -18,6 +18,7 @@ import enum
 import importlib.util
 import os
 import sys
+from typing import Optional
 
 from rich.panel import Panel
 from rich.tree import Tree
@@ -96,7 +97,7 @@ def load_kaitai_parser(path: str):
     sys.exit(1)
 
 
-def parse_kaitai(parser_class, data: bytes) -> Tree | None:
+def parse_kaitai(parser_class, data: bytes) -> Optional[Tree]:
     """Parse binary data with a Kaitai Struct parser and return a Rich Tree."""
     try:
         from io import BytesIO
@@ -129,7 +130,7 @@ def _build_tree(node: Tree, obj, depth: int = 0):
         if callable(val):
             continue
 
-        if isinstance(val, bytes | bytearray):
+        if isinstance(val, (bytes, bytearray)):
             if len(val) > 32:
                 node.add(f"{attr}: [dim]{val[:32].hex()}... ({len(val)}B)[/dim]")
             elif val:

@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""CLI entry point: whl-ip-tools send / view."""
+"""CLI entry point: whl-ip-tools send / dump / view."""
+
+from typing import List, Optional
 
 import typer
 
@@ -25,14 +27,14 @@ app = typer.Typer(
 
 @app.command()
 def send(
-    udp: str | None = typer.Option(
+    udp: Optional[str] = typer.Option(
         None,
         "--udp",
         "-u",
         metavar="HOST:PORT",
         help="UDP target/bind address",
     ),
-    tcp: str | None = typer.Option(
+    tcp: Optional[str] = typer.Option(
         None,
         "--tcp",
         "-t",
@@ -64,7 +66,7 @@ def send(
         metavar="SEC",
         help="Delay between chunks in seconds (default: 0.1)",
     ),
-    count: int | None = typer.Option(
+    count: Optional[int] = typer.Option(
         None,
         "--count",
         "-n",
@@ -94,14 +96,14 @@ def send(
 
 @app.command()
 def dump(
-    udp: str | None = typer.Option(
+    udp: Optional[str] = typer.Option(
         None,
         "--udp",
         "-u",
         metavar="HOST:PORT",
         help="UDP bind/connect address",
     ),
-    tcp: str | None = typer.Option(
+    tcp: Optional[str] = typer.Option(
         None,
         "--tcp",
         "-t",
@@ -141,14 +143,14 @@ def dump(
 
 @app.command()
 def view(
-    udp: str | None = typer.Option(
+    udp: Optional[str] = typer.Option(
         None,
         "--udp",
         "-u",
         metavar="HOST:PORT",
         help="UDP bind/connect address",
     ),
-    tcp: str | None = typer.Option(
+    tcp: Optional[str] = typer.Option(
         None,
         "--tcp",
         "-t",
@@ -165,7 +167,7 @@ def view(
         "--hex",
         help="Start in hex display mode (press s in TUI to switch)",
     ),
-    kaitai: list[str] | None = typer.Option(
+    kaitai: Optional[List[str]] = typer.Option(
         None,
         "--kaitai",
         "-k",

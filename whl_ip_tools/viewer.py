@@ -21,6 +21,7 @@ import sys
 import threading
 import time
 from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Set, Tuple
 
 from rich.text import Text
 from textual import work
@@ -46,7 +47,7 @@ def _node_key(label_plain: str) -> str:
 class PacketEntry:
     data: bytes
     addr: tuple
-    parser_class: type | None = None  # which kaitai parser matched (cached)
+    parser_class: Optional[type] = None  # which kaitai parser matched (cached)
     count: int = 1
     total_bytes: int = 0
     first_time: float = field(default_factory=time.time)
@@ -109,7 +110,7 @@ class PacketViewer(App):
         port: int,
         server: bool,
         hex_mode: bool,
-        kaitai_parsers: list[type] | None = None,
+        kaitai_parsers: Optional[List[type]] = None,
         frame_id_bytes: int = 4,
     ):
         super().__init__()
@@ -122,18 +123,18 @@ class PacketViewer(App):
         self._running = True
 
         # Display modes: hex always available, kaitai added when any parser loaded
-        self.display_modes: list[str] = ["hex"]
+        self.display_modes: List[str] = ["hex"]
         if self.kaitai_parsers:
             self.display_modes.insert(0, "kaitai")
         self.active_display = "hex" if hex_mode else self.display_modes[0]
 
-        self.packets: dict[str, PacketEntry] = {}
-        self.selected_key: str | None = None
+        self.packets: Dict[str, PacketEntry] = {}
+        self.selected_key: Optional[str] = None
         self.total_packets = 0
         self.total_bytes = 0
         self._last_detail_update = 0.0
         self._last_table_update = 0.0
-        self._expanded_paths: set[tuple[str, ...]] = set()
+        self._expanded_paths: Set[Tuple[str, ...]] = set()
 
     # ── Compose & mount ─────────────────────────────────────────────
 
@@ -390,7 +391,7 @@ class PacketViewer(App):
 
     # ── Packet dedup & display ──────────────────────────────────────
 
-    def _get_packet_key(self, data: bytes, matched_parser: type | None) -> str:
+    def _get_packet_key(self, data: bytes, matched_parser: Optional[type]) -> str:
         if matched_parser:
             return matched_parser.__name__
         n = self.frame_id_bytes
@@ -475,9 +476,9 @@ class PacketViewer(App):
 
     def _save_tree_state(self) -> None:
         """Walk the detail tree and remember which node paths are expanded."""
-        expanded: set[tuple[str, ...]] = set()
+        expanded: Set[Tuple[str, ...]] = set()
 
-        def walk(node, path: tuple[str, ...]):
+        def walk(node, path: Tuple[str, ...]):
             for child in node.children:
                 label = (
                     child.label.plain
@@ -500,7 +501,7 @@ class PacketViewer(App):
         if not saved:
             return
 
-        def walk(node, path: tuple[str, ...]):
+        def walk(node, path: Tuple[str, ...]):
             for child in node.children:
                 label = (
                     child.label.plain
@@ -565,7 +566,7 @@ class PacketViewer(App):
             if callable(val):
                 continue
 
-            if isinstance(val, bytes | bytearray):
+            if isinstance(val, (bytes, bytearray)):
                 hex_str = val[:16].hex()
                 suffix = f"... ({len(val)}B)" if len(val) > 16 else ""
                 node.add(f"{attr}: {hex_str}{suffix}")
@@ -609,11 +610,11 @@ class PacketViewer(App):
 
 
 def run_viewer(
-    udp: str | None,
-    tcp: str | None,
+    udp: Optional[str],
+    tcp: Optional[str],
     server: bool,
     hex_mode: bool,
-    kaitai: list[str] | None,
+    kaitai: Optional[List[str]],
     frame_id_bytes: int = 4,
 ):
     """Entry point for the view subcommand."""
@@ -622,7 +623,8 @@ def run_viewer(
         sys.exit(1)
 
     proto = "udp" if udp else "tcp"
-    addr = udp or tcp  # type: ignore[assignment]
+    addr = udp or tcp
+    assert addr is not None
     host, port = addr.rsplit(":", 1)
     port = int(port)
 

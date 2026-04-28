@@ -19,6 +19,7 @@ import socket
 import sys
 import threading
 import time
+from typing import Optional, Tuple
 
 
 def log(msg: str):
@@ -26,7 +27,7 @@ def log(msg: str):
     print(f"[{ts}] {msg}", flush=True)
 
 
-def _parse_addr(addr_str: str) -> tuple[str, int]:
+def _parse_addr(addr_str: str) -> Tuple[str, int]:
     host, port = addr_str.rsplit(":", 1)
     return host, int(port)
 
@@ -171,8 +172,8 @@ def _tcp_client(host: str, port: int, output_path: str, append: bool):
 
 
 def run_dump(
-    udp: str | None,
-    tcp: str | None,
+    udp: Optional[str],
+    tcp: Optional[str],
     output: str,
     append: bool,
     server: bool,
