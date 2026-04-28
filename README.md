@@ -34,6 +34,24 @@ whl-ip-tools send -u 192.168.1.100:9090 -f frame.bin -n 10 -i 0.1
 
 ### view — Interactive TUI packet viewer
 
+### dump — Dump received packets to a file
+
+```bash
+# UDP server, write to file
+whl-ip-tools dump -u 0.0.0.0:9090 -o dump.bin --server
+
+# TCP server
+whl-ip-tools dump -t 0.0.0.0:9090 -o dump.bin --server
+
+# UDP client (sends trigger byte, then receives)
+whl-ip-tools dump -u 192.168.1.100:9090 -o dump.bin
+
+# TCP client, append mode
+whl-ip-tools dump -t 192.168.1.100:9090 -o dump.bin -a
+```
+
+### view — Interactive TUI packet viewer
+
 ```bash
 # UDP server, hex mode
 whl-ip-tools view -u 0.0.0.0:9090 --server

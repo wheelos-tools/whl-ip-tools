@@ -93,6 +93,53 @@ def send(
 
 
 @app.command()
+def dump(
+    udp: str | None = typer.Option(
+        None,
+        "--udp",
+        "-u",
+        metavar="HOST:PORT",
+        help="UDP bind/connect address",
+    ),
+    tcp: str | None = typer.Option(
+        None,
+        "--tcp",
+        "-t",
+        metavar="HOST:PORT",
+        help="TCP bind/connect address",
+    ),
+    output: str = typer.Option(
+        "dump.bin",
+        "--output",
+        "-o",
+        metavar="FILE",
+        help="Output file path (default: dump.bin)",
+    ),
+    append: bool = typer.Option(
+        False,
+        "--append",
+        "-a",
+        help="Append to output file instead of overwriting",
+    ),
+    server: bool = typer.Option(
+        False,
+        "--server",
+        help="Server mode (listen for connections)",
+    ),
+):
+    """Dump received packets to a file."""
+    from .dumper import run_dump
+
+    run_dump(
+        udp=udp,
+        tcp=tcp,
+        output=output,
+        append=append,
+        server=server,
+    )
+
+
+@app.command()
 def view(
     udp: str | None = typer.Option(
         None,
